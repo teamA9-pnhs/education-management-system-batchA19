@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style>
+body {
+    background: #9053c7;
+    background-color: -webkit-linear-gradient(-135deg, #c850c0, #4158d0);
+    background: -webkit-linear-gradient(-200deg,#4158d0, #c850c0 );
+    font-family: Arial, Helvetica, sans-serif;
+	
+}
+
+.card-heading,
+.card-subheading {
+    font-weight: bold
+}
+
+.card {
+    width: 450px;
+    height: 440px;
+    border: none;
+    border-radius: 10px
+}
+
+.form-control {
+    border: none;
+    border-radius: 10px
+}
+
+
+}
+
+.form-control {
+    background-color: #eee !important
+}
+
+.form-control:focus {
+    color: #495057;
+    border-color: #fff !important;
+    outline: 0;
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, .25) !important
+}
+
+
+
+.ffour {
+    padding-left: 30px
+}
+
+.ffour input {
+    width: 120%;
+    background-color: rgba(165, 147, 69, 0.075)
+}
+
+.ffive input {
+    width: 120%;
+    background-color: rgba(165, 147, 69, 0.075)
+}
+
+
+.para1 {
+    height: 10px;
+    font-size: 12px
+}
+
+.para2 {
+    font-size: 12px
+}
+
+
+.btn:link,
+.btn:visited {
+    text-transform: uppercase;
+    text-decoration: none;
+   padding-left: 50px;
+    padding: 15px 40px;
+    display: inline-block;
+    border-radius: 100px;
+    transition: all .2s;
+    
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-white {
+    background-color: #64d450;
+    color: #777;
+}
+
+.btn::after {
+    content: "";
+    display: flex;
+    
+    border-radius: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: all .4s;
+}
+
+.btn-white::after {
+    background-color: #64d450;
+}
+
+.btn:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+}
+
+.btn-animated {
+    animation: moveInBottom 5s ease-out;
+    animation-fill-mode: backwards;
+}
+
+@keyframes moveInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+
+.hero-box{
+    padding-top: 0px;
+    padding-left: 110px;
+}
+@media screen and (max-width: 768px) {
+    
+
+    
+
+    .ffour input {
+        width: 90%
+    }
+
+    .ffive input {
+        width: 86%
+    }
+}
+
+
+.goHome{
+    padding-top: 20px;
+    float: right;
+}
+</style>
+
+<title>ReSet Password</title>
+	 <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+</head>
+	<body>
+         <form action="{% url 'change_password' %}" method="post">
+            
+
+            <h1 style="font-size: 60px; padding-left: 20px;">Forgot Password</h1>
+		 <div class="container d-flex justify-content-center">
+    <div class="card mx-5 my-5">
+        <div class="card-body px-2">
+            <div class="goHome">
+                <a href="#"  style="color: #64d450; margin-top: -20px;">Go home</a>
+            </div>
+            
+            <h2 class="card-heading px-3">Create a new password and click on confirm</h2>
+            <h5 class="card-subheading px-3 pb-3"><br>It's quick and easy.</h5>
+            <form>
+                <input  id="1hidden_input" {% if email %} value="{{ email }}" {% endif %} type="Email" name="otp_email">
+      <script>
+          document.getElementById("1hidden_input").style.display="none";
+      </script>
+         
+               {%csrf_token%}
+                <div class="row rthree">
+                    <div class="form-group col-md-5 ffour"> <input name="password1" type="password" class="form-control" placeholder="Password"> </div>
+                    <div class="form-group col-md-5 ffive"> <input name="password2" type="password" class="form-control ml-3" placeholder="Confirm password"> </div> <small class="text-muted px-3">
+                       {% if message %}
+                       <p class="class text-muted">{{message}}</p>
+                       {% endif %}
+                        <p class="para2 pl-3">Use 8 or more characters with a mix of letters,numbers &<br>symbols</p>
+                        
+                    </small>
+                </div>
+               
+               <button type="submit" class="btn btn-primary btn-animates">Confirm</button>
+                <!-- <div class="row rfour">
+                    <div class="hero-box"> 
+                        <a href="#" class="btn btn-white btn-animate">Confirm</a>
+                       
+                      </div>
+                </div> -->
+
+               
+               
+            </form>
+        </div>
+    </div>
+</div>
+		
+
+			
+</body>
+</html>

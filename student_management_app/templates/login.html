@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% load static %} 
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{% static "images/icons/favicon.ico" %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static "vendor/bootstrap/bootstrap.min.css" %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static "fonts/font-awesome-4.7.0/css/font-awesome.min.css" %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static "vendor/animate/animate.css" %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static "vendor/css-hamburgers/hamburgers.min.css" %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static "vendor/select2/select2.min.css" %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static "css/util.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}">
+<!--===============================================================================================-->
+</head>
+<body>
+
+<div class="limiter">
+  <div class="container-login100">
+    <div class="wrap-login100">
+      <div class="login100-pic js-tilt" data-tilt>
+        <img src="{% static "/media/logo.png" %}" alt="IMG">
+      </div>
+
+      <form class="login100-form validate-form"  action="{% url 'doLogin' %}" method="post">
+        {% csrf_token %}
+        <span class="login100-form-title">
+          College Login
+        </span>
+
+        <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+          <input class="input100" type="text"  placeholder="Email" name="email">
+          <span class="focus-input100"></span>
+          <span class="symbol-input100">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+          </span>
+        </div>
+
+        <div class="wrap-input100 validate-input" data-validate = "Password is required">
+          <input class="input100" type="password"  placeholder="Password" name="password">
+          <span class="focus-input100"></span>
+          <span class="symbol-input100">
+            <i class="fa fa-lock" aria-hidden="true"></i>
+          </span>
+        </div>
+        
+        <div class="container-login100-form-btn">
+          <button class="login100-form-btn">
+            Login
+          </button>
+        </div>
+        {% if message %}
+        <p class="text-muted">{{message}}</p>
+        {% endif %}
+        <div class="text-center p-t-12">
+          <span class="txt1">
+            Forgot
+          </span>
+          <a class="txt2" href="check_email/">
+            Username / Password?
+          </a>
+        </div>
+
+        <div class="text-center p-t-136">
+          <a class="txt2" href="#">
+            Create your Account
+            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--===============================================================================================-->	
+<script src="{% static "vendor/jquery/jquery-3.2.1.min.js" %}"></script>
+<!--===============================================================================================-->
+<script src="{% static "vendor/bootstrap/js/popper.js" %}"></script>
+<script src="{% static "vendor/bootstrap/js/bootstrap.min.js" %}"></script>
+<!--===============================================================================================-->
+<script src="{% static "vendor/select2/select2.min.js" %}"></script>
+<!--===============================================================================================-->
+<script src="{% static "vendor/tilt/tilt.jquery.min.js" %}"></script>
+<script >
+  $('.js-tilt').tilt({
+    scale: 1.1
+  })
+</script>
+<!--===============================================================================================-->
+<script src="{% static "js/main.js" %}"></script>
+<!-- <script src="{% static "js/validate.js" %}"></script> -->
+
+</body>
+</html>
+
+
+
+
+<!-- 
+    <body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="{% url 'login' %}"><b>Student </b>Management System</a>
+  </div> -->
+  <!-- /.login-logo -->
+  <!-- <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Sign in to Student Management System</p>
+
+      <form action="{% url 'doLogin' %}" method="POST">
+      {% csrf_token %}
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" placeholder="Email" name="email">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Password" name="password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+
+          {% comment %} <div class="col-12 text-center">
+            <a href="{% url 'password_reset' %}">Reset Password</a>
+          </div>  {% endcomment %}
+
+          {% comment %} Display Messages {% endcomment %}
+          {% if messages %}
+          <div class="col-12">
+            {% for message in messages %}
+              {% if message.tags == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %} -->
+
+          <!-- /.col -->
+        <!-- </div>
+      </form>
+
+
+  </div>
+</div> -->
+<!-- /.login-box -->
+
+{% endblock content %}

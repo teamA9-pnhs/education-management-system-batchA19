@@ -1,0 +1,155 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+    Search Staff
+{% endblock page_title %}
+
+{% block main_content %}
+
+{% load static %}
+
+<section class="content">
+        <div class="container-fluid">
+         
+            <div class="card-tools">
+                 
+                <div class="card-header">
+                    {% if searched %}
+		                You Searched For {{ searched }}
+                        <br>
+	                {% else %}
+		                Enter Name Of the Staff Here
+                        <br>
+                	{% endif %}
+
+                    
+
+                    <form method=POST action="{% url 'search_staff'  %}">
+                        {% csrf_token %}
+                        <div class="input-group input-group" style="width: 390px;">
+                            <input class="form-control me-2" type="search" onkeyup="success()" placeholder="Search Venues" aria-label="Search" name="searched" id="search"> 
+                            <div class="input-group-append">
+                                <button class="btn btn btn-success" type="submit" id="button" disabled>Search</button>
+                            </div>
+                        </div>
+                    </form>
+    
+
+                    <div class="card-body table-responsive p-0">
+
+                    
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Last Login</th>
+                            <th>Date Joined</th>
+                            <th>Action</th>
+                            </tr>
+                        </thead>
+                        {% for search_result in search_results %}
+
+                       
+                        
+                       
+                        
+                        <!-- <div class="card"> -->
+                            <!-- <div class="card-body"> -->
+                              <!-- <h5 class="card-title">{{ search_results }}</h5> -->
+                          
+                        <tbody>
+                            <tr>
+                                <td>{{ search_result.staffs.admin.id }}</td>
+                                <td>{{ search_result.staffs.admin.first_name }}</td>
+                                <td>{{ search_result.staffs.admin.last_name }}</td>
+                                <td>{{ search_result.staffs.admin.username }}</td>
+                                <td>{{ search_result.staffs.admin.email }}</td>
+                                <td>{{ search_result.staffs.address }}</td>
+                                <td>{{ search_result.staffs.admin.last_login }}</td>
+                                <td>{{ search_result.staffs.admin.date_joined }}</td>
+                                <td>
+                                    <a href="{% url 'manage_subject'%}" class="btn btn-success">Open</a> 
+                                    <a href="{% url 'edit_staff' search_result.staffs.admin.id %}" class="btn btn-info">Edit</a> 
+                                    <a href="{% url 'delete_staff'  search_result.staffs.admin.id %}" class="btn btn-danger">Delete</a>
+                                </td>
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                            </table>
+                  </div>
+                </div>
+               
+                <!-- <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Gender</th>
+                        <th>Profile Pic</th>
+                        <th>Start Year</th>
+                        <th>End Year</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Last Login</th>
+                        <th>Date Joined</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                        <td>{{ student.admin.id }}</td>
+                        <td>{{ student.admin.first_name }}</td>
+                        <td>{{ student.admin.last_name }}</td>
+                        <td>{{ student.admin.username }}</td>
+                        <td>{{ student.admin.email }}</td>
+                        <td>{{ student.address }}</td>
+                        <td>{{ student.gender }}</td>
+                        <td> <img src="{{ student.profile_pic }}" style="width: 100px;" /> </td>
+                        <td>{{ student.session_year_id.session_start_year }}</td>
+                        <td>{{ student.session_year_id.session_end_year }}</td>
+                        <td>{{ student.course_id.course_name }}</td>
+                        <td>{{ student.semester_id.semester_name }}</td>
+                        <td>{{ student.admin.last_login }}</td>
+                        <td>{{ student.admin.date_joined }}</td>
+                        <td>
+                            <a href="{% url 'manage_subject'  %}" class="btn btn-success">Open</a> 
+                            <a href="{% url 'edit_student' student.admin.id %}" class="btn btn-info">Edit</a> 
+                            <a href="{% url 'delete_student' student.admin.id %}" class="btn btn-danger">Delete</a>
+                        </td>
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                    </table> -->
+              
+            </div>
+            
+
+        </div><!-- /.container-fluid -->
+      </section>
+
+     
+      <script>
+          function success() {
+	         if(document.getElementById("search").value==="") { 
+                document.getElementById("button").disabled = true; 
+                
+             } else { 
+            document.getElementById("button").disabled = false;
+             }
+         }
+       </script>
+
+      {% endblock main_content %}
+    

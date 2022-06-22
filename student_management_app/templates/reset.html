@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<title>
+
+</title>
+<link rel="stylesheet" type="text/css" href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}">
+
+<div class="container">
+    <form  action="{% url 'reset_password' %}" method="post">
+        <div class="form-group">
+            <!-- <label for="emailforreset">Email Address</label> -->
+            {% csrf_token %}
+            <input {% if email %} value="{{ email }}" {% endif %} type="Email" class="form-control" placeholder="Email Here" name="email">
+            <button type="submit" class="form-control btn btn-primary">Go</button>
+            <small class="form-text text-muted">{{ message }}</small>
+            {% if exists %}
+            <h2>The email address exists </h2>
+            <button type="submit" class="btn btn-danger" name=> SEND RESET LINK </button>
+            {% endif %}
+        </div>
+        
+        
+    </form>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  background: #9053c7;
+    background-color: -webkit-linear-gradient(-135deg, #c850c0, #4158d0);
+    background: -webkit-linear-gradient(-200deg,#4158d0, #c850c0 );
+}
+h1{
+text-align:center;
+font-family: Arial, Helvetica, sans-serif;
+padding : 25px;
+text-color:white;
+font-size: 45px;
+}
+h2{
+  padding-bottom: 20px;
+}
+
+h4{
+  font-size: 20px;
+  font-family: sans-serif;
+
+}
+
+.container-fluid { 
+  
+  padding-top: 50px;
+  height: auto;
+  max-width: 100%;
+  width: 100%;
+  border-radius: 15px;
+background-color: #e9ecef; 
+font-family: Arial, Helvetica, sans-serif;
+  padding-bottom: 70px;
+ text-align:center;
+} 
+
+
+
+.img{
+
+border-radius:5px;
+position :relative;
+float :left;
+}
+
+.login-btn{
+  font-family: Montserrat-Bold;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #fff;
+  text-transform: uppercase;
+
+  width: 20%;
+  height: 40px;
+  border-radius: 20px;
+  background: #57b846;
+
+}
+
+.login-button{
+  padding-top: 30px;
+
+}
+
+
+/* BUTTON */
+
+body {
+    font-family: sans-serif;
+    background: #9053c7;
+    background-color: -webkit-linear-gradient(-135deg, #c850c0, #4158d0);
+    background: -webkit-linear-gradient(-200deg,#4158d0, #c850c0 );
+    font-weight: bold;
+}
+
+
+.btn:link,
+.btn:visited {
+    text-transform: uppercase;
+    text-decoration: none;
+   padding-left: 50px;
+    padding: 15px 40px;
+    display: inline-block;
+    border-radius: 100px;
+    transition: all .2s;
+    
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-white {
+    background-color: #64d450;
+    color: #777;
+}
+
+.btn::after {
+    content: "";
+    display: inline-block;
+    
+    border-radius: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: all .4s;
+}
+
+.btn-white::after {
+    background-color: #64d450;
+}
+
+.btn:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+}
+
+.btn-animated {
+    animation: moveInBottom 5s ease-out;
+    animation-fill-mode: backwards;
+}
+
+@keyframes moveInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+input[type=email] {
+  font-family: Poppins-Medium;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #666666;
+    display: block;
+    width: 50%;
+    padding-left: 50px;
+    background: #e6e6e6;
+    height: 50px;
+    border-radius: 25px;
+    padding-left: 40px;
+}
+
+.email{
+
+  display: -webkit-inline-box;
+}
+
+
+
+#partitioned {
+  
+  border: 0;
+  background-position: bottom;
+  background-size: 50px 1px;
+ 
+ 
+  width: 390px;
+}
+
+
+.nav-link{
+  font-size: 20px;
+  float: right;
+  margin-right: 20px;
+}
+
+</style>
+
+<title>Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{% static "fonts/font-awesome-4.7.0/css/font-awesome.min.css" %}">
+
+</head>
+	<body>
+
+    <h1 style="font-size: 70px; padding-bottom: 22px;">Reset Password</h1>
+      <section class="box">
+        <div class="container-fluid">
+
+          <nav class="nav-link"> <a href="{%url 'login' %}"  style="color: #64d450;">Go home</a></nav>
+              <h1>Forgot Password</h1>
+               <h2 style="font-family: sans-serif; word-spacing: 1px;"> You can reset your password by submitting your email.</h2>
+              <h4>Enter your E-mail to check if user exists.</h4>
+              <form id="form" method="post" action="{% url 'reset_password' %}">
+                {% csrf_token %}
+                <div class="email">
+                  <!-- <input id="partitioned" type="text" maxlength="6" style="background-color:  #e9ecef; padding-top: 30px; margin-bottom: 20px;" /> -->
+                  <input  id="partitioned" type="email" placeholder="Email address" name="email" required>
+                </div>
+                <!-- <input class="email" type="email" id="email" name="email" size="40" height="50" placeholder="Enter Your Email Here" style="display: flexbox;" required> -->
+              
+                <div class="login-button">
+                  <div class="hero-box"> 
+                    <!-- <a href="javascript:{}" onclick="document.getElementById('form').submit();" class="btn btn-white btn-animate">Verify & Send OTP</a> -->
+                    <button type="submit" class="btn btn-white btn-animate">Verify and Send OTP</button>
+                    </div>
+              </form>
+              </div>
+        </div>
+      </section>
+   
+
+
+</body>
+</html>
