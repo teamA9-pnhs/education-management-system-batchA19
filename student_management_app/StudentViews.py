@@ -5,7 +5,7 @@ from django.core.files.storage import FileSystemStorage #To upload Profile Pictu
 from django.urls import reverse
 import datetime # To Parse input DateTime into Python Date Time Object
 
-from student_management_app.models import CustomUser, Staffs, Courses, Subjects, Students, Attendance, AttendanceReport, LeaveReportStudent, FeedBackStudent, StudentResult
+from student_management_app.models import CustomUser, Semester, Staffs, Courses, Subjects, Students, Attendance, Semester_OE, Subjects_OE, Forms_OE,AttendanceReport, LeaveReportStudent, FeedBackStudent, StudentResult
 
 
 def student_home(request):
@@ -196,5 +196,91 @@ def student_view_result(request):
 
 
 
+def student_oe(request):
+    student = Students.objects.get(admin = request.user.id)
+    semester_id = student.semester_id.id
+    semester = Semester.objects.get(id = semester_id)
+    print(semester.semester_name, " SEMESTER")
+    subjects = Subjects_OE.objects.filter(semester_id = semester.id)
+    # semesters = Semester_OE.objects.all()
+
+    contexts = {
+        "subjects": subjects,
+        # "semesters": semesters
+    }
+    return render(request, 'student_template/student_open_electives.html', contexts)
+
+def student_oe_save(request):
+    if request.method != "POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        print( "STARTING SAVE")
+        username = Students.objects.get(admin = request.user.id)
+        semester_id = username.semester_id.id
+        semester = Semester_OE.objects.get(id = semester_id)
+        print(semester.id, " SEMESTER SAVE")
+        
+
+        # username = request.POST.get('username')
+        open_elective_name = request.POST.get('open_elective_id')
+        # oe_semester = request.POST.get('semester_id')
+        print(username.id , " USERNAM SAVE")
+        print(open_elective_name , "OPEN ELECTIVE SAVE")
+        print(semester.id , " SEMESTER SAVE")
+        try:
+            # INSERTING into  Model
+            print("Creating Open Elective")
+            print( username.id , open_elective_name , semester.id)
+            open_elective = Forms_OE(subject_name_id=open_elective_name,username_id=username.id,semester_name_id=semester.id)
+            print(open_elective)
+            open_elective.save()
+            print("saved")
+            messages.success(request, "Form Sent Successfully!")
+            return redirect('student_home')
+        except:
+            messages.error(request, "Failed")
+            return redirect('student_home')
+    
+    
+def delete_form_oe(request,form_id):
+      form = Forms_OE.objects.get(id=form_id)
+      try:
+        form.delete()
+        messages.success(request, "Student Deleted Successfully.")
+        return redirect('manage_oe_list')
+      except:
+        messages.error(request, "Failed to Delete Student.")
+        return redirect('manage_oe_list')
 
 
+def edit_staff_save(request):
+    if request.method != "POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        staff_id = request.POST.get('staff_id')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        address = request.POST.get('address')
+
+        try:
+            # INSERTING into Customuser Model
+            user = CustomUser.objects.get(id=staff_id)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.username = username
+            user.save()
+            
+            # INSERTING into Staff Model
+            staff_model = Staffs.objects.get(admin=staff_id)
+            staff_model.address = address
+            staff_model.save()
+
+            messages.success(request, "Staff Updated Successfully.")
+            return redirect('/edit_staff/'+staff_id)
+
+        except:
+            messages.error(request, "Failed to Update Staff.")
+            return redirect('/edit_staff/'+staff_id)

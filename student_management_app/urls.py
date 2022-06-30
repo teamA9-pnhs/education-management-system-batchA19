@@ -93,8 +93,7 @@ urlpatterns = [
     path('open_electives_save/',HodViews.open_electives_save, name="open_electives_save"),
     path('add_sem_open_electives/',HodViews.add_sem_open_electives, name="add_sem_open_electives"),
     path('add_sem_open_electives_save/',HodViews.add_sem_open_electives_save, name="add_sem_open_electives_save"),
-    
-
+    path('manage_oe_list/',HodViews.manage_oe_list, name="manage_oe_list"),
     path('search_student/',HodViews.search_student, name="search_student"),
     path('search_staff/',HodViews.search_staff, name="search_staff"),
     # URLS for Staff
@@ -126,4 +125,7 @@ urlpatterns = [
     path('student_profile/', StudentViews.student_profile, name="student_profile"),
     path('student_profile_update/', StudentViews.student_profile_update, name="student_profile_update"),
     path('student_view_result/', StudentViews.student_view_result, name="student_view_result"),
+    path('student_oe/', StudentViews.student_oe, name="student_oe"),
+    path('student_oe_save/', StudentViews.student_oe_save, name="student_oe_save"),
+    path('delete_form_oe/<form_id>/', StudentViews.delete_form_oe, name="delete_course"),
 ] 

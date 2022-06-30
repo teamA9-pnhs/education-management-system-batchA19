@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 import json
 
-from student_management_app.models import CustomUser, Staffs, Courses, Semester,Semester_OE,Subjects,Subjects_OE,Students, SessionYearModel, FeedBackStudent, FeedBackStaffs, LeaveReportStudent, LeaveReportStaff, Attendance, AttendanceReport, Subjects_OE
+from student_management_app.models import CustomUser, Forms_OE, Staffs, Courses, Semester,Semester_OE,Subjects,Subjects_OE,Students, SessionYearModel, FeedBackStudent, FeedBackStaffs, LeaveReportStudent, LeaveReportStaff, Attendance, AttendanceReport, Subjects_OE
 from .forms import AddStudentForm, EditStudentForm
 
 #---------------DASHBOARD-----------------------------------#
@@ -356,14 +356,19 @@ def add_subj_open_electives_save(request):
         course_id = request.POST.get('course')
         course = Courses.objects.get(id=course_id)
 
-        # electives_semesters = request.POST.get('semester_id')
-        # semester = Semester_OE.objects.get(id=electives_semesters)
+        electives_semesters = request.POST.get('semester_id')
+        print(electives_semesters, "THIS IS SEMESTER")
+        semester = Semester_OE.objects.get(id=electives_semesters)
+        print(semester.semester_name , "REAL semester")
+        print(semester.id , " semester ID")
         
         staff_id = request.POST.get('staff')
         staff = CustomUser.objects.get(id=staff_id)
 
         try:
             subject = Subjects_OE(subject_name=subject_name,course_id=course, staff_id=staff)
+            print("Object created")
+            subject.semester_id_id = electives_semesters
             subject.save()
             messages.success(request, "Subject Added Successfully!")
             return redirect('add_subj_open_electives')
@@ -373,6 +378,8 @@ def add_subj_open_electives_save(request):
 
     #    subject = Subjects_OE(subject_name=subject_name, course_id=course, semester_id = semester, staff_id=staff)
 def manage_subj_open_electives(request):
+    # semester = request.POST.get(semester.id)
+    # print(semester , " THis is the semester required ++++++++++++++++")
     elective_subjects = Subjects_OE.objects.all()
     context = {
         "electives_subjects": elective_subjects
@@ -626,128 +633,243 @@ def add_student(request):
 
 
 import re
+
+
 def add_student_save(request):
     if request.method != "POST":
         messages.error(request, "Invalid Method ")
         return redirect('add_student')
     
     elif request.FILES.get('student_file'):
-        studentFile = request.FILES['student_file']
-        fileText = studentFile.read().decode('utf-8')
-        print(fileText,  " thiS IS THE FILE TEXT")
-        regex = "2SD%"
-        line = re.split('\n',fileText)
-        print(line ," thIS IS THE SEPARATED LINE");
+       studentFile = request.FILES['student_file']
+       fileText = studentFile.read().decode('utf-8')
+       print(fileText)
+       regex = "2SD%"
+       line = re.split('\n',fileText)
+       print(line);
+       print( ' --------')
+       line1 = re.split('\t',line[0], maxsplit=6)
+       print(line1)
+       print("------------------")
+    #    session_start = line1[1];
+    #    session_end = line1[3];
+    #    semister_id = line1[5];
     #    print(Sess_start +" And " + Sess_end)
-        for x in line[:-1]:
-            # m = re.match('(\d)? (.*)\S',x)
-            m = re.split('\t',x)
-            print(m , "THIS IS MMMMMMMMMMM")
-            print(m[1])
-        #    if(m[0] != "Session Start:"):
+       for x in line:
+           # m = re.match('(\d)? (.*)\S',x)
+           m = re.split('\t',x)
+        #    print(m[1])
+           if(m != ''):
             print(m)
-            raw_name = m[1]
-            name= re.split('\s',raw_name)
-            first_name = name[0]
-            last_name =name[1]
-            print(first_name + " " + last_name + " THIs is the first name and the last name")
+            first_name = m[1]
             for l in m:
                 if(l.isnumeric()):
                     print(l + " This is a number ")
                 elif re.match(r'^2SD',l) :
-                    print("Username: " +l)
                     username= l;
                 elif re.match(r'\S+@\S+',l):
-                    print("email" +l)
                     email = l
                 elif re.match('Male',l) or re.match('Female',l):
-                    sex = l.replace('\r','')
-
+                    sex = l
             password="student"
-            address= "Goa"
+            address= ""
+            last_name= ""
             session_year_id = request.POST.get('session_year_id')
-            try:
-                print("Creating")
-                print( username + " | " + password + " | " + email + " | " + first_name+ " | " + last_name + " | " + sex)
-                user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
-                # Students.objects.create(admin=user, course_id=Courses.objects.get(id=1), session_year_id=SessionYearModel.objects.get(id=1), address="", profile_pic="", gender="")
-                print(user , "Created")
-                user.students.address = address
-                print("Address")
-                session_year_obj = SessionYearModel.objects.get(id=session_year_id)
-                semester_name = request.POST.get('semester_id')
+            # semester_name = request.POST.get('semester_id')
                 # semister_obj=Semisters.objects.get(id=semister_id)
-                user.students.semester_id=semester_name
+            # print(semester_name , " THIS IS THE SEMESTER NAME")
+                
+            try:
+
+                user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
+                print("created")
+                user.students.address = address
+                print("address added")
+                print(session_year_id , " searching for this")
+                session_year_obj = SessionYearModel.objects.get(id=session_year_id)
+                print(session_year_obj , " This is the session")
+                # semister_obj=Semisters.objects.get(id=semister_id)
+                # user.students.semister_id=semister_obj
                 # user.students.session_start_year=session_start
                 # user.students.session_end_year=session_end
+                semester_name = request.POST.get('semester_id')
+                # semister_obj=Semisters.objects.get(id=semister_id)
+                print(semester_name , " This is the semester Name")
+                semester = Semester.objects.get(id = semester_name)
+                user.students.semester_id_id=semester_name
                 user.students.session_year_id = session_year_obj
+                print("YEar added")
                 user.students.gender=sex
+                print("Sex added")
                 user.students.profile_pics=""
                 print("Just saving the student")
                 user.save()
                 print("Saved, He's all our")
                 messages.success(request, "Student Added Successfully!")
-                return redirect('add_student')
-            except BaseException as err:
-                print(f"Unexpected {err=}, {type(err)=}")
+                # return redirect('add_student')
+            except:
                 messages.error(request, "Failed to Add Student!")
-                return redirect('add_student')
+                # return redirect('add_student')
                 print( " Not able to add any students now")
                 
-        return redirect('add_student')
+       return redirect('add_student')
 
     else:
-
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
         address = request.POST.get('address')
-        semester_id =request.POST.get('semester_id')
         session_year_id = request.POST.get('session_year_id')
-        course_id = request.POST.get('course_id')
-        gender = request.POST.get('sex')
-
-
-        # form = AddStudentForm(request.POST, request.FILES)
-
-        # if form.is_valid():
-        #     first_name = form.cleaned_data['first_name']
-        #     last_name = form.cleaned_data['last_name']
-        #     username = form.cleaned_data['username']
-        #     email = form.cleaned_data['email']
-        #     password = form.cleaned_data['password']
-        #     address = form.cleaned_data['address']
-        #     semester_id = form.cleaned_data['semester_id']
-        #     session_year_id = form.cleaned_data['session_year_id']
-        #     course_id = form.cleaned_data['course_id']
-        #     gender = form.cleaned_data['sex']
+        # semister_id=request.POST.get('semister')
+        sex=request.POST.get("sex")
 
         try:
-                user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
-                user.students.address = address
-                user.students.semester = semester_id
-
-                course_obj = Courses.objects.get(id=course_id)
-                user.students.course_id = course_obj
-
-                semester_obj = Semester.objects.get(id=semester_id)
-                user.students.semester_id = semester_obj
-
-                session_year_obj = SessionYearModel.objects.get(id=session_year_id)
-                user.students.session_year_id = session_year_obj
-
-                user.students.gender = gender
-                user.students.profile_pics=""
-                # user.students.profile_pic = profile_pic_url
-                user.save()
-                messages.success(request, "Student Added Successfully!")
-                return redirect('add_student')
+            print("trying")
+            user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
+            print("User created")
+            user.students.address = address
+            session_year_obj = SessionYearModel.objects.get(id=session_year_id) 
+            # semister_obj=Semesters.objects.get(id=semister_id)
+            # user.students.semister_id=semister_obj
+            user.students.session_year_id = session_year_obj
+            print("year added")
+            user.students.gender=sex
+            print("SEx added")
+            user.students.profile_pics=""
+            print("profile pic added")
+            user.save()
+            messages.success(request, "Student Added Successfully!")
+            return redirect('add_student')
         except:
             messages.error(request, "Failed to Add Student!")
             return redirect('add_student')
 
+
+# def add_student_save(request):
+#     if request.method != "POST":
+#         messages.error(request, "Invalid Method ")
+#         return redirect('add_student')
+    
+#     elif request.FILES.get('student_file'):
+#         studentFile = request.FILES['student_file']
+#         fileText = studentFile.read().decode('utf-8')
+#         print(fileText,  " thiS IS THE FILE TEXT")
+#         regex = "2SD%"
+#         line = re.split('\n',fileText)
+#         print(line ," thIS IS THE SEPARATED LINE");
+#     #    print(Sess_start +" And " + Sess_end)
+#         for x in line[:-1]:
+#             # m = re.match('(\d)? (.*)\S',x)
+#             m = re.split('\t',x)
+#             print(m , "THIS IS MMMMMMMMMMM")
+#             print(m[1])
+#         #    if(m[0] != "Session Start:"):
+#             print(m)
+#             raw_name = m[1]
+#             name= re.split('\s',raw_name)
+#             first_name = name[0]
+#             last_name =name[1]
+#             print(first_name + " " + last_name + " THIs is the first name and the last name")
+#             for l in m:
+#                 if(l.isnumeric()):
+#                     print(l + " This is a number ")
+#                 elif re.match(r'^2SD',l) :
+#                     print("Username: " +l)
+#                     username= l;
+#                 elif re.match(r'\S+@\S+',l):
+#                     print("email" +l)
+#                     email = l
+#                 elif re.match('Male',l) or re.match('Female',l):
+#                     sex = l.replace('\r','')
+
+#             password="student"
+#             address= "Goa"
+#             session_year_id = request.POST.get('session_year_id')
+#             try:
+#                 print("Creating")
+#                 print( username + " | " + password + " | " + email + " | " + first_name+ " | " + last_name + " | " + sex)
+#                 user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
+#                 # Students.objects.create(admin=user, course_id=Courses.objects.get(id=1), session_year_id=SessionYearModel.objects.get(id=1), address="", profile_pic="", gender="")
+#                 print(user , "Created")
+#                 user.students.address = address
+#                 print("Address")
+#                 session_year_obj = SessionYearModel.objects.get(id=session_year_id)
+#                 semester_name = request.POST.get('semester_id')
+#                 # semister_obj=Semisters.objects.get(id=semister_id)
+#                 print(semester_name)
+#                 semester = Semester.objects.get(id = semester_name)
+#                 user.students.semester_id_id=semester_name
+#                 # user.students.session_start_year=session_start
+#                 # user.students.session_end_year=session_end
+#                 user.students.session_year_id = session_year_obj
+#                 user.students.gender=sex
+#                 user.students.profile_pics=""
+#                 print("Just saving the student")
+#                 user.save()
+#                 print("Saved, He's all our")
+#                 messages.success(request, "Student Added Successfully!")
+#                 return redirect('add_student')
+#             except BaseException as err:
+#                 print(f"Unexpected {err=}, {type(err)=}")
+#                 messages.error(request, "Failed to Add Student!")
+#                 return redirect('add_student')
+#                 print( " Not able to add any students now")
+                
+#         return redirect('add_student')
+
+#     else:
+
+#         first_name = request.POST.get('first_name')
+#         last_name = request.POST.get('last_name')
+#         username = request.POST.get('username')
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#         address = request.POST.get('address')
+#         semester_id =request.POST.get('semester_id')
+#         session_year_id = request.POST.get('session_year_id')
+#         course_id = request.POST.get('course_id')
+#         gender = request.POST.get('sex')
+
+
+#         # form = AddStudentForm(request.POST, request.FILES)
+
+#         # if form.is_valid():
+#         #     first_name = form.cleaned_data['first_name']
+#         #     last_name = form.cleaned_data['last_name']
+#         #     username = form.cleaned_data['username']
+#         #     email = form.cleaned_data['email']
+#         #     password = form.cleaned_data['password']
+#         #     address = form.cleaned_data['address']
+#         #     semester_id = form.cleaned_data['semester_id']
+#         #     session_year_id = form.cleaned_data['session_year_id']
+#         #     course_id = form.cleaned_data['course_id']
+#         #     gender = form.cleaned_data['sex']
+
+#         try:
+#                 user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
+#                 user.students.address = address
+#                 user.students.semester = semester_id
+
+#                 course_obj = Courses.objects.get(id=course_id)
+#                 user.students.course_id = course_obj
+
+#                 semester_obj = Semester.objects.get(id=semester_id)
+#                 user.students.semester_id = semester_obj
+
+#                 session_year_obj = SessionYearModel.objects.get(id=session_year_id)
+#                 user.students.session_year_id = session_year_obj
+
+#                 user.students.gender = gender
+#                 user.students.profile_pics=""
+#                 # user.students.profile_pic = profile_pic_url
+#                 user.save()
+#                 messages.success(request, "Student Added Successfully!")
+#                 return redirect('add_student')
+#         except:
+#             messages.error(request, "Failed to Add Student!")
+#             return redirect('add_student')
 
 
 
@@ -1064,6 +1186,25 @@ def staff_feedback_message(request):
     return render(request, 'hod_template/staff_feedback_template.html', context)
 
 
+def manage_oe_list(request):
+    form = Forms_OE.objects.all()
+    print(form)
+    context = {
+        "form": form
+    }
+    return render(request, 'hod_template/manage_oe_list.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
 @csrf_exempt
 def staff_feedback_message_reply(request):
     feedback_id = request.POST.get('id')
@@ -1249,3 +1390,5 @@ def search_staff(request):
 # 		return render(request,'hod_template/search_student.html',{'searched':searched,'search_results':search_results})
 # 	else:
 # 		return render(request,'hod_template/search_student.html',{})
+
+

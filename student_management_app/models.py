@@ -80,8 +80,17 @@ class Subjects_OE(models.Model):
     id =models.AutoField(primary_key=True)
     subject_name = models.CharField(max_length=255)
     course_id = models.ForeignKey(Courses, on_delete=models.CASCADE, default=1) #need to give defauult course
-    semester_id = models.ForeignKey(Semester_OE, on_delete=models.DO_NOTHING, default=1)
+    semester_id = models.ForeignKey(Semester_OE, on_delete=models.CASCADE, default=1)
     staff_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE,default=1)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+class Forms_OE(models.Model):
+    id =models.AutoField(primary_key=True)
+    subject_name = models.ForeignKey(Subjects_OE, on_delete=models.CASCADE, default=1)
+    username = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
+    semester_name = models.ForeignKey(Semester_OE, on_delete=models.CASCADE, default=1)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()

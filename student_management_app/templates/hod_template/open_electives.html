@@ -69,15 +69,14 @@
                             <tbody>
                                 {% for semester in electives_semesters %}
                                 <tr>
-                                <td>{{ semester.id }}</td>
+                                <td name="semester_id_page">{{ semester.id }}</td>
                                 <td>{{ semester.semester_name }}</td>
                                 <td>{{ semester.created_at }}</td>
                                 <td>{{ semester.updated_at }}</td>
                                 <td>
                                     <!-- <button class="btn btn-success" onclick="showSubjects()">Open</button> -->
                                     <a href="{% url 'manage_subj_open_electives' %}" class="btn btn-success">Open</a> 
-                                    <!-- <a href="{% url 'edit_semester' semester.id %}" class="btn btn-info">Edit</a> 
-                                    <a href="{% url 'delete_semester' semester.id %}" class="btn btn-danger">Delete</a> -->
+                                   
                                 </td>
                                 </tr>
                                 {% endfor %}

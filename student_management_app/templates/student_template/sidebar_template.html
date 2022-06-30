@@ -81,6 +81,16 @@
               </a>
             </li>
 
+            <li class="nav-item">
+              {% url 'student_oe' as student_oe %}
+              <a href="{{ student_oe }}" class="nav-link {% if request.path == student_oe %} active {% endif %}">
+                <i class="nav-icon fas fa-comments"></i>
+                <p>
+                  Open Electives
+                  {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
+                </p>
+              </a>
+            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
